@@ -1,0 +1,108 @@
+<html>
+<body>
+
+<form action="poc2" method="get">
+<Br/>Book id<input type="text" name="whocares" id="bid"/>
+<span id="msg"></span><br>
+<br>Book name<input type="text" name="" id="bname"/>
+<br>Price <input type="text" name="" id="bprice">
+<br>
+<br>
+<input type="submit" value="update" id="bupdate"/>
+</form>
+
+
+<!-- <form action="poc1" method="post">
+<Br/>whocares<input type="text" name="whocares"/>
+<input type="submit" value="post"/>
+</form> -->
+
+<!-- <button value="Submit" id="b2"> jquery works</button> -->
+
+
+</body>
+
+<script src="jquery-3.5.1.min.js"></script>
+<script>//our scrip will come here 
+
+$(() =>{
+	console.log('blur event occured');
+	
+	let input = {bid: $('#bid').val()}
+	let ajaxparam = {
+		data : input,
+		url:'http://localhost:900/getdetails',
+		type:'get',
+		dataType:'json',
+
+		success: (datafromserver) => {
+			if(datafromserver.status === true){
+				console.log("Reached Here");
+				$('#bname').val(datafromserver.details.bname);
+				$('#bprice').val(datafromserver.details.bprice);
+				$('#msg').text("bookid is found");
+				$('#bupdate').prop("disables",true);
+			}
+			else{
+				$('#bname').val("");
+				$('#bprice').val("");
+				$('#msg').text("bookid is not found");
+				$('#bupdate').prop("disabled",false);
+			}
+		},
+		error: (errorfromserver)=>{
+			console.log("Error occured"+errorfromserver);
+		}
+	}
+	$.ajax(ajaxparam);
+});
+
+// =============================UPDATE============================
+$('#bupdate').click(()=>{
+	console.log("Update btn clicked");
+
+	let input = {bid: $('#bid').val(),bname:$('#bname').val(),bprice:$('#bprice').val()}
+
+	let ajaxparam = {
+		data:input,
+		url:'http://localhost:900/update',
+		type:'get',
+		dataType:'json',
+		
+		success:(datafromserver)=>{
+			if(datafromserver.status === true){
+				console.log("update successfully");
+				$('#msg').text("Reached & updated success");
+			}
+			else{
+				console.log("Update unsucessfull");
+				$('#msg').text("Reached update unsuccess");
+			}
+			},
+		error:(errorfromserver)=>{
+			console.log(errorfromserver);
+			$('#msg').text("Error occured while updating");
+		}
+	}
+	$.ajax(ajaxparam);
+});
+
+
+
+// ========================================sir's====
+// $(document).ready(function()
+// {
+// console.log("no more sins");
+// $("#b2").click(function () 
+// 	{ 
+// 		//console.log("jquery works");
+// 		alert("jquery works")
+// 	});
+	
+// });
+// ========================================
+
+</script>
+
+
+</html>
